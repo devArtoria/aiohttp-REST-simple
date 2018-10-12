@@ -1,4 +1,8 @@
-from api import *
+import json
+from collections import OrderedDict
+from aiohttp.web_urldispatcher import UrlDispatcher
+
+from api import CollectionView, InstanceView
 
 
 class Router:

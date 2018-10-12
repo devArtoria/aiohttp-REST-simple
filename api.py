@@ -1,18 +1,15 @@
 import inspect
-import json
 import datetime
-from collections import OrderedDict
-from models import Post, session
 from aiohttp.http_exceptions import HttpBadRequest
 from aiohttp.web_exceptions import HTTPMethodNotAllowed, HTTPNotFound
 from aiohttp.web import Request, Response
-from aiohttp.web_urldispatcher import UrlDispatcher
+from models import Post, session
 
 DEFAULT_METHODS = ('GET', 'POST', 'DELETE', 'PATCH')
 
 
 class EndpointBase:
-    
+
     def __init__(self):
         self.methods = {}
 
@@ -26,6 +23,7 @@ class EndpointBase:
 
     async def dispatch(self, request: Request):
         method = self.methods.get(request.method.upper())
+        print(method)
         if not method:
             raise HTTPMethodNotAllowed('', DEFAULT_METHODS)
         wanted_args = list(inspect.signature(method).parameters.keys())
@@ -53,7 +51,7 @@ class CollectionView(EndpointBase):
             'posts': [
                 {'id': post.id, 'title': post.title, 'body': post.body,
                  'created_at': post.created_at, 'created_by': post.created_by}
-                for post in session.query(Post)]
+                for post in posts]
         }), content_type='application/json')
 
     async def post(self, request: Request) -> Response:
@@ -88,7 +86,7 @@ class InstanceView(EndpointBase):
         if not instance:
             raise HTTPNotFound(body={{"not found": 404}}, content_type="application/json")
 
-        data = self.resource.render_and_encode(instace)
+        data = self.resource.render_and_encode(instance)
         return Response(status=200, body=data, content_type='application/json')
 
     async def put(self, request, instance_id):
@@ -108,9 +106,8 @@ class InstanceView(EndpointBase):
     async def delete(self, instance_id):
         post = session.query(Post).filter(Post.id == instance_id).first()
         if not post:
-            raise HTTPNotFound(text="Post {} doesn't exist".format(id), content_type="application/text")
-        session.delete(note)
+            raise HTTPNotFound(text="Post {} doesn't exist".format(id),
+                               content_type="application/text")
+        session.delete(post)
         session.commit()
-        return Response(status=204)        
-
-    
+        return Response(status=204)

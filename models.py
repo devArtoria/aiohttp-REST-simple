@@ -5,8 +5,7 @@ from zope.sqlalchemy import ZopeTransactionExtension
 
 DB_URI = 'sqlite:///stuff.db'
 
-Session = sessionmaker(autocommit=True, autoflush=True, bind=create_engine(DB_URI))
-session = scoped_session(Session)
+session = scoped_session(sessionmaker(autocommit=True, autoflush=True, bind=create_engine(DB_URI)))
 Base = declarative_base()
 
 class Post(Base):
@@ -18,7 +17,7 @@ class Post(Base):
     created_at = Column(DateTime(50))
     created_by = Column(String(50))
 
-    def __init__(self, title, body, created_at ,created_by):
+    def __init__(self, title, body, created_at, created_by):
         self.title = title
         self.body = body
         self.created_at = created_at
@@ -30,10 +29,10 @@ class Post(Base):
 
     def to_json(self):
         to_serialize = ['id', 'title', 'body', 'created_at', 'created_by']
-        d = {}
+        data = {}
         for attr_name in to_serialize:
-            d[attr_name] = getattr(self, attr_name)
-        return d
+            data[attr_name] = getattr(self, attr_name)
+        return data
 
 
 if __name__ == "__main__":
