@@ -1,12 +1,14 @@
 from sqlalchemy import create_engine, Column, Integer, String, DateTime
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import scoped_session, sessionmaker
-from zope.sqlalchemy import ZopeTransactionExtension
 
 DB_URI = 'sqlite:///stuff.db'
 
-session = scoped_session(sessionmaker(autocommit=True, autoflush=True, bind=create_engine(DB_URI)))
+session = scoped_session(sessionmaker(autocommit=True,
+                                      autoflush=True,
+                                      bind=create_engine(DB_URI)))
 Base = declarative_base()
+
 
 class Post(Base):
     __tablename__ = "post"

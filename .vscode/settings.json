@@ -3,5 +3,8 @@
     "python.linting.pylintEnabled": true,
     "python.linting.enabled": true,
     "python.linting.pylintArgs": ["--rcfile=${workspaceFolder}/.pylintrc",
-    "--disable=missing-docstring,E1101"]
+    "--disable=missing-docstring,E1101"
+],
+"python.linting.flake8Enabled": false,
+"python.linting.pep8Enabled": false
 }

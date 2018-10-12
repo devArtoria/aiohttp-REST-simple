@@ -6,10 +6,8 @@ from api import CollectionView, InstanceView
 
 
 class Router:
-    def __init__(self, posts, factory, collection, properties, id_field):
-        self.posts = posts
+    def __init__(self, factory, properties, id_field):
         self.factory = factory
-        self.collection = collection
         self.properties = properties
         self.id_field = id_field
 
@@ -17,11 +15,14 @@ class Router:
         self.instance_view = InstanceView(self)
 
     def register(self, router: UrlDispatcher):
-        router.add_route('*', '/{posts}'.format(posts=self.posts), self.collection_view.dispatch)
-        router.add_route('*', '/{posts}/{{instance_id}}'.format(posts=self.posts), self.instance_view.dispatch)
+        router.add_route('*', '/posts',
+                         self.collection_view.dispatch)
+        router.add_route('*', '/posts/{{instance_id}}',
+                         self.instance_view.dispatch)
 
     def render(self, instance):
-        return OrderedDict((posts, getattr(instance, posts)) for posts in self.properties)
+        return OrderedDict((posts, getattr(instance, posts))
+                           for posts in self.properties)
 
     @staticmethod
     def encode(data):

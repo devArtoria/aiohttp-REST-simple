@@ -32,7 +32,9 @@ class EndpointBase:
         unsatisfied_args = set(wanted_args) - set(available_args.keys())
         if unsatisfied_args:
             raise HttpBadRequest('')
-        return await method(**{arg_name: available_args[arg_name] for arg_name in wanted_args})
+        return await method(**{arg_name: available_args[arg_name]
+                            for arg_name in wanted_args})
+
 
 class CollectionView(EndpointBase):
     def __init__(self, resource):
@@ -75,6 +77,7 @@ class CollectionView(EndpointBase):
             }
         ), content_type="application/json")
 
+
 class InstanceView(EndpointBase):
     def __init__(self, resource):
         super().__init__()
@@ -84,7 +87,8 @@ class InstanceView(EndpointBase):
         instance = session.query(Post).filter(Post.id == instance_id)
 
         if not instance:
-            raise HTTPNotFound(body={{"not found": 404}}, content_type="application/json")
+            raise HTTPNotFound(body={{"not found": 404}},
+                               content_type="application/json")
 
         data = self.resource.render_and_encode(instance)
         return Response(status=200, body=data, content_type='application/json')

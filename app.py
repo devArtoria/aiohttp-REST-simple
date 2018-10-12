@@ -4,10 +4,9 @@ from models import Post
 
 posts = {}
 app = Application()
-person_resource = Router(posts='posts',
-                         factory=Post,
-                         collection=posts,
-                         properties=('title', 'body', 'created_at', 'created_by'),
+person_resource = Router(factory=Post,
+                         properties=('title', 'body',
+                                     'created_at', 'created_by'),
                          id_field='title')
 
 person_resource.register(app.router)
