@@ -2,14 +2,15 @@ import json
 from collections import OrderedDict
 from aiohttp.web_urldispatcher import UrlDispatcher
 
-from view.collections import CollectionView
-from view.instance import InstanceView
+from app.view.collections import CollectionView
+from app.view.instance import InstanceView
+
+from app.models.posts import Post
 
 
 class Router:
-    def __init__(self, factory, properties):
-        self.factory = factory
-        self.properties = properties
+    def __init__(self):
+        self.factory = Post
         self.collection_view = CollectionView(self)
         self.instance_view = InstanceView(self)
 
@@ -21,7 +22,8 @@ class Router:
 
     def render(self, instance):
         return OrderedDict((posts, getattr(instance, posts))
-                           for posts in self.properties)
+                           for posts in ('title', 'body', 
+                                                  'created_at', 'created_by'))
 
     def encode(self, data):
         return json.dumps(data, indent=4).encode('utf-8')

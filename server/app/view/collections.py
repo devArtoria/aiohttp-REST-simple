@@ -1,8 +1,8 @@
 import datetime
-from models.posts import Post
-from models import session
+from app.models.posts import Post
+from app.models import session
 from aiohttp.web import Request, Response
-from view import EndpointBase
+from app.view import EndpointBase
 
 
 class CollectionView(EndpointBase):

@@ -1,8 +1,8 @@
-from models.posts import Post
-from models import session
+from app.models.posts import Post
+from app.models import session
 from aiohttp.web import Request, Response
 from aiohttp.web_exceptions import HTTPNotFound
-from view import EndpointBase
+from app.view import EndpointBase
 
 
 class InstanceView(EndpointBase):
@@ -11,7 +11,7 @@ class InstanceView(EndpointBase):
         self.resource = resource
 
     async def get(self, request: Request, instance_id: int) -> Request:
-        instance = session.query(Post).filter(Post.id == instance_id)
+        instance = session.query(Post).filter(Post.id == instance_id).first()
 
         if not instance:
             raise HTTPNotFound(body={{"not found": 404}},

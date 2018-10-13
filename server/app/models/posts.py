@@ -1,9 +1,9 @@
 from sqlalchemy import Column, Integer, String, DateTime
-from models import Base
+from app.models import Base
 
 
 class Post(Base):
-    __tablename__ = "post"
+    __tablename__ = "posts"
 
     id = Column(Integer, primary_key=True)
     title = Column(String(50))
