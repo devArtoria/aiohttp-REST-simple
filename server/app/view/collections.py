@@ -29,15 +29,14 @@ class CollectionView(EndpointBase):
                     created_by=data['created_by'])
 
         session.add(post)
-
         session.commit()
 
-        return Response(status=201, body=self.resource.encoder(
+        return Response(status=201, body=self.resource.encode(
             {
                 "posts": [{'id': post.id,
                            'title': post.title,
                            'body': post.body,
-                           'created_at': post.created_at,
+                           'created_at': str(post.created_at),
                            'created_by': post.created_by}
                           for post in session.query(Post)]
             }

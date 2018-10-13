@@ -17,7 +17,11 @@ class InstanceView(EndpointBase):
             raise HTTPNotFound(body={{"not found": 404}},
                                content_type="application/json")
 
-        data = self.resource.render_and_encode(instance)
+        data = self.resource.encode({'id': instance.id,
+                                     'title': instance.title,
+                                     'body': instance.body,
+                                     'created_at': str(instance.created_at),
+                                     'created_by': instance.created_by})
         return Response(status=200, body=data, content_type='application/json')
 
     async def patch(self, request, instance_id):
