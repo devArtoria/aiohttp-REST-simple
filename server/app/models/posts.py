@@ -1,17 +1,19 @@
-from sqlalchemy import Column, Integer, String, DateTime
+from uuid import uuid4
+from sqlalchemy import Column, String, DateTime
 from app.models import Base
 
 
 class Post(Base):
     __tablename__ = "posts"
 
-    id = Column(Integer, primary_key=True)
+    id = Column(String(30), primary_key=True)
     title = Column(String(50))
     body = Column(String(300))
     created_at = Column(DateTime(50))
     created_by = Column(String(50))
 
     def __init__(self, title, body, created_at, created_by):
+        self.id = uuid4().hex
         self.title = title
         self.body = body
         self.created_at = created_at

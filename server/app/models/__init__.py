@@ -7,7 +7,7 @@ basedir = os.path.abspath(os.path.dirname(__file__))
 
 DB_URI = 'mysql+pymysql://root:asdfqwer@localhost:3306/posts'
 
-session = scoped_session(sessionmaker(autocommit=True,
+session = scoped_session(sessionmaker(autocommit=False,
                                       autoflush=True,
                                       bind=create_engine(DB_URI)))
 Base = declarative_base()
