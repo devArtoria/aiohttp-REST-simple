@@ -1,13 +1,12 @@
 from aiohttp.web import Application, run_app
 from router import Router
-from models import Post
+from models.posts import Post
 
 posts = {}
 app = Application()
 person_resource = Router(factory=Post,
                          properties=('title', 'body',
-                                     'created_at', 'created_by'),
-                         id_field='title')
+                                     'created_at', 'created_by'))
 
 person_resource.register(app.router)
 
