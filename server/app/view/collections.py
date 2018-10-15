@@ -7,18 +7,22 @@ from app.view import EndpointBase
 
 class CollectionView(EndpointBase):
     def __init__(self, resource):
-        super().__init__(allowed_methods=('GET', 'POST'))
+        super().__init__(allowed_methods=('GET', 'POST', 'OPTIONS'))
         self.resource = resource
 
     async def get(self) -> Response:
         posts = session.query(Post).all()
 
-        return Response(status=200, body=self.resource.encode({
-            'posts': [
-                {'id': post.id, 'title': post.title, 'body': post.body,
-                 'created_at': post.created_at, 'created_by': post.created_by}
-                for post in posts]
-        }), content_type='application/json')
+        return Response(status=201, body=self.resource.encode(
+            {
+                "posts": [{'id': post.id,
+                           'title': post.title,
+                           'body': post.body,
+                           'created_at': str(post.created_at),
+                           'created_by': post.created_by}
+                          for post in posts]
+            }
+        ), content_type="application/json")
 
     async def post(self, request: Request) -> Response:
         data = await request.json()
