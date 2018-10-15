@@ -1,15 +1,15 @@
 import inspect
 from aiohttp.http_exceptions import HttpBadRequest
 from aiohttp.web_exceptions import HTTPMethodNotAllowed
-from aiohttp.web import Request
+from aiohttp.web import Request, Response
+from multidict import CIMultiDict
 
 
 class EndpointBase:
 
-    def __init__(self, allowed_methods: set=('GET',
-                                             'POST',
-                                             'DELETE',
-                                             'PATCH')):
+    def __init__(self, allowed_methods: set=('GET', 'POST', 'PUT',
+                                             'DELETE', 'PATCH', 'HEAD',
+                                             'OPTIONS', 'TRACE', 'CONNECT')):
         self.allowed_methods = allowed_methods
         self.methods = {}
 
@@ -20,6 +20,10 @@ class EndpointBase:
 
     def register_method(self, method_name: str, method):
         self.methods[method_name.upper()] = method
+
+    async def options(self, request: Request):
+        return Response(headers=CIMultiDict(
+            Allow=" ".join(self.allowed_methods)))
 
     async def dispatch(self, request: Request):
         method = self.methods.get(request.method.upper())

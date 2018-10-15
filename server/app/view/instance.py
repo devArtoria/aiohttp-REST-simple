@@ -7,7 +7,7 @@ from app.view import EndpointBase
 
 class InstanceView(EndpointBase):
     def __init__(self, resource):
-        super().__init__(allowed_methods=('GET', 'PATCH'))
+        super().__init__(allowed_methods=('GET', 'PATCH', 'DELETE','OPTIONS'))
         self.resource = resource
 
     async def get(self, request: Request, instance_id: str) -> Request:
